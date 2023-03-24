@@ -1,28 +1,71 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <el-row v-if="islogin">
+      <el-col :span="1">
+        <el-menu
+          :default-active="defaultactive"
+          class="el-menu-vertical-demo"
+          :collapse="isCollapse"
+          @select="moveto"
+        >
+          <el-menu-item index="1">
+            <i class="el-icon-money"></i>
+          </el-menu-item>
+        </el-menu>
+      </el-col>
+      <el-col :span="23">
+        <div>
+          <router-view></router-view>
+        </div>
+      </el-col>
+    </el-row>
+    <el-row v-if="!islogin">
+      <el-input v-model="todo_user_name" placeholder="请输入内容"></el-input>
+      <el-input
+        placeholder="请输入密码"
+        v-model="todo_user_pass"
+        show-password
+      ></el-input>
+      <el-button type="primary" @click="login">确 定</el-button>
+    </el-row>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+// console.log(FishTang.data())
 
+import axios from "axios";
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  name: "App",
+  data() {
+    return {
+      islogin: false,
+      defaultactive: "1",
+      isCollapse: true,
+      routers: ["/FishTang"],
+      todo_user_name: "",
+      todo_user_pass: "",
+    };
+  },
+  methods: {
+    moveto: function (index) {
+      this.$router.push(this.routers[index - 1]);
+    },
+    login: function (event) {
+      axios
+        .post("/login", {
+          user_name: this.todo_user_name,
+          user_pass: this.todo_user_pass,
+        })
+        .then((response) => {
+          if (response.data.code == 200) {
+            axios.defaults.headers.common["Authorization"] =
+              response.data.token;
+            this.islogin = true;
+            this.$router.push("/FishTang");
+          }
+        });
+    },
+  },
+};
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
