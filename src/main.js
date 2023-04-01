@@ -4,6 +4,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import App from './App.vue'
 import VueRouter from 'vue-router'
 import FishTang from './components/FishTang.vue'
+import FA from './components/FundAnalysis.vue'
 import axios from 'axios'
 
 Vue.use(ElementUI)
@@ -13,6 +14,10 @@ Vue.config.productionTip = false
 const routes = [{
   path: '/FishTang',
   component: FishTang
+},
+{
+  path: '/FA',
+  component: FA
 }
 ]
 
