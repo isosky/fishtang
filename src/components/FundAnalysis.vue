@@ -32,7 +32,7 @@
         <el-col :span="5">
           <el-select
             v-model="funder_selected"
-            @change="getcalendar"
+            @change="getfirmdata"
             clearable
             filterable
             default-first-option
@@ -95,7 +95,7 @@
         ></el-col>
       </el-row>
       <el-row style="height: 450px">
-        <el-col :span="6">
+        <el-col :span="6" v-show="showonefund == 1">
           <div>
             <el-statistic
               group-separator=","
@@ -138,14 +138,21 @@
           <div id="calendar_div" style="height: 450px"></div>
         </el-col>
       </el-row>
-      <el-row>
+      <el-row v-show="showonefund == 1">
         <div id="div_one_total" style="height: 450px"></div>
       </el-row>
     </el-col>
     <el-col :span="14">
       <el-row>
         <el-table
-          :data="reviewtabledata"
+          :data="
+            reviewtabledata.filter(
+              (v) =>
+                v.funder_id == funder_selected ||
+                !funder_selected ||
+                v.funder_id == 1
+            )
+          "
           style="width: 100%"
           height="500"
           :cell-style="pricestyle"
@@ -203,7 +210,7 @@
           </el-table-column>
         </el-table>
       </el-row>
-      <el-row v-if="funder_firm_status"
+      <el-row v-if="showfirm == 1"
         ><el-header style="text-align: left; font-size: 20px"
           ><span>实盘</span></el-header
         >
@@ -482,11 +489,12 @@ export default {
         funder_table: [],
       },
       fund_label_option: [],
+      showonefund: 1,
+      showfirm: 0,
       temp_attitude: 0,
       temp_operation: "不动",
       temp_review: "",
       temp_funderreviewtable: [],
-      funder_firm_status: false,
       reviewtabledata: [],
       fund_had_option: [],
       fund_had_list: "",
@@ -697,9 +705,11 @@ export default {
     getcalendar: function () {
       if (this.fund_had_code_selected != "" && this.date_selected != "") {
         console.log("我的某个基金");
+        this.showonefund = 1;
         axios
           .post("/getfundcalendar", {
             fund_code: this.fund_had_code_selected,
+            mode: "fund",
           })
           .then((response) => {
             // console.log(response);
@@ -710,12 +720,29 @@ export default {
             this.sform = response.data.sform;
             // console.log(this.calendar_option);
             this.calendar_chart.setOption(this.calendar_option);
+            this.calendar_chart.resize();
           });
-
         this.setonetotalchart();
       }
-      if (this.funder_selected != "" && this.date_selected != "") {
+      if (this.fund_had_code_selected == "" && this.date_selected != "") {
+        this.showonefund = 0;
         console.log("某个博主");
+        axios
+          .post("/getfundcalendar", {
+            funder_selected: this.funder_selected,
+            mode: "author",
+          })
+          .then((response) => {
+            // console.log(response);
+            this.calendar_option.series[0].data = response.data.bs_data;
+            this.calendar_option.series[1].data = response.data.bs_data;
+            this.calendar_option.series[2].data = response.data.data;
+            this.calendar_option.calendar.range = this.date_selected;
+            this.sform = response.data.sform;
+            // console.log(this.calendar_option);
+            this.calendar_chart.setOption(this.calendar_option);
+            this.calendar_chart.resize();
+          });
       }
     },
     gethadfund: function () {
@@ -864,10 +891,21 @@ export default {
           this.temp_funderreviewtable = response.data;
         });
     },
+    getfirmdata: function () {
+      let funder_name = this.funder_option_list[this.funder_selected];
+      if (funder_name.indexOf("实盘") != -1) {
+        this.showfirm = 1;
+      } else {
+        this.showfirm = 0;
+      }
+    },
     getfunderreviewondday: function () {
-      this.funderreviewform.funder_table =
-        this.temp_funderreviewtable[this.funderreviewform.fund_review_time];
-      console.log(this.funderreviewform.fund_review_time);
+      if (
+        this.funderreviewform.fund_review_time in this.temp_funderreviewtable
+      ) {
+        this.funderreviewform.funder_table =
+          this.temp_funderreviewtable[this.funderreviewform.fund_review_time];
+      }
     },
   },
 };

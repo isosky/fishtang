@@ -125,8 +125,9 @@
           ></el-table-column>
           <el-table-column
             prop="is_firm"
-            label="行业"
-            width="240"
+            label="实盘"
+            width="120"
+            :formatter="isformat"
           ></el-table-column>
         </el-table>
       </el-row>
@@ -230,6 +231,13 @@ export default {
       axios.get("/getappsoption").then((response) => {
         this.apps_option = response.data;
       });
+    },
+    isformat: function (row, index) {
+      if (row.isfirm == 1) {
+        return "是";
+      } else {
+        return "否";
+      }
     },
   },
 };
