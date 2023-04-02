@@ -2,7 +2,7 @@
   <div id="app">
     <el-col :span="10">
       <el-row :span="5">
-        <el-col :span="6">
+        <el-col :span="5">
           <el-select
             v-model="fund_had_code_selected"
             @change="getcalendar"
@@ -18,7 +18,7 @@
               :value="item.value"
             >
             </el-option> </el-select></el-col
-        ><el-col :span="3">
+        ><el-col :span="4">
           <el-date-picker
             v-model="date_selected"
             type="month"
@@ -29,14 +29,14 @@
           >
           </el-date-picker
         ></el-col>
-        <el-col :span="4">
+        <el-col :span="5">
           <el-select
             v-model="funder_selected"
             @change="getcalendar"
             clearable
             filterable
             default-first-option
-            placeholder="请选择博主"
+            placeholder="请选择作者"
           >
             <el-option
               v-for="item in funder_option"
@@ -45,24 +45,53 @@
               :value="item.value"
             >
             </el-option> </el-select></el-col
-        ><el-col :span="8" :offset="1">
+        ><el-col :span="10">
           <el-button-group>
-            <el-button
-              type="primary"
-              @click="lastmonth"
-              icon="el-icon-arrow-left"
-            ></el-button>
-            <el-button
-              type="primary"
-              @click="nextmonth"
-              icon="el-icon-arrow-right"
-            ></el-button>
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="上个月"
+              placement="bottom-end"
+            >
+              <el-button
+                type="primary"
+                @click="lastmonth"
+                icon="el-icon-arrow-left"
+              ></el-button>
+            </el-tooltip>
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="下个月"
+              placement="bottom-end"
+            >
+              <el-button
+                type="primary"
+                @click="nextmonth"
+                icon="el-icon-arrow-right"
+              ></el-button>
+            </el-tooltip>
             <el-button type="primary" icon="el-icon-refresh"></el-button>
-            <el-button type="primary" icon="el-icon-plus"></el-button>
-            <el-button
-              type="primary"
-              icon="el-icon-coin"
-            ></el-button></el-button-group
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="增加作者复盘"
+              placement="bottom-end"
+            >
+              <el-button
+                type="primary"
+                icon="el-icon-plus"
+                @click="showdialogfunderreview"
+              ></el-button
+            ></el-tooltip>
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="增加实盘"
+              placement="bottom-end"
+            >
+              <el-button type="primary" icon="el-icon-coin"></el-button
+            ></el-tooltip> </el-button-group
         ></el-col>
       </el-row>
       <el-row style="height: 450px">
@@ -117,20 +146,82 @@
       <el-row>
         <el-table
           :data="reviewtabledata"
-          show-summary
           style="width: 100%"
-          height="700"
+          height="500"
           :cell-style="pricestyle"
           ref="reviewtabledata"
         >
           <el-table-column
-            prop="fund_review_time"
-            label="时间"
+            prop="fund_label"
+            label="行业"
             width="120"
           ></el-table-column>
           <el-table-column prop="apps" label="来源" width="80">
           </el-table-column>
-          <el-table-column prop="funder_name" label="博主名称" width="120">
+          <el-table-column prop="funder_name" label="作者" width="120">
+          </el-table-column>
+          <el-table-column
+            prop="fund_review_attitude"
+            label="走势预期"
+            width="60"
+          ></el-table-column>
+          <el-table-column
+            prop="operation"
+            label="操作"
+            width="60"
+          ></el-table-column>
+          <el-table-column
+            prop="fund_review"
+            label="总结"
+            width="300"
+          ></el-table-column>
+          <el-table-column prop="isfirm" label="实盘" width="80">
+          </el-table-column>
+          <el-table-column
+            prop="earn_percent"
+            sortable
+            label="收益率"
+            width="100"
+          >
+          </el-table-column>
+          <el-table-column
+            prop="review_confidence"
+            sortable
+            label="可信度"
+            width="100"
+          >
+          </el-table-column>
+          <el-table-column label="操作" width="80">
+            <template slot-scope="scope">
+              <el-button
+                @click="diashowreview(scope.row)"
+                type="text"
+                size="small"
+                >修改</el-button
+              >
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-row>
+      <el-row v-if="funder_firm_status"
+        ><el-header style="text-align: left; font-size: 20px"
+          ><span>实盘</span></el-header
+        >
+        <el-table
+          :data="reviewtabledata"
+          style="width: 100%"
+          height="400"
+          :cell-style="pricestyle"
+          ref="reviewtabledata"
+        >
+          <el-table-column
+            prop="fund_label"
+            label="行业"
+            width="120"
+          ></el-table-column>
+          <el-table-column prop="apps" label="来源" width="80">
+          </el-table-column>
+          <el-table-column prop="funder_name" label="作者" width="120">
           </el-table-column>
           <el-table-column
             prop="fund_review_attitude"
@@ -186,6 +277,13 @@
               style="width: 450px"
             ></el-input>
           </el-form-item>
+          <el-form-item label="基金行业" :label-width="formLabelWidth">
+            <el-input
+              v-model="reviewform.fund_label"
+              disabled
+              style="width: 450px"
+            ></el-input>
+          </el-form-item>
           <el-form-item label="复盘日期" :label-width="formLabelWidth">
             <el-date-picker
               v-model="reviewform.fund_review_time"
@@ -236,6 +334,133 @@
         <el-button type="primary" @click="commitreview">确 定</el-button>
       </div>
     </el-dialog>
+    <el-dialog :visible.sync="dialogfunderreviewFormVisible" width="50%">
+      <el-form :model="funderreviewform">
+        <el-row :span="5">
+          <el-col :span="8">
+            <el-form-item label="作者" :label-width="formLabelWidth">
+              <el-input
+                v-model="funderreviewform.funder_name"
+                disabled
+                style="width: 200px"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="复盘日期" :label-width="formLabelWidth">
+              <el-date-picker
+                v-model="funderreviewform.fund_review_time"
+                value-format="yyyy-MM-dd"
+                type="date"
+                @change="getfunderreviewondday"
+                placeholder="选择日期"
+                style="width: 200px"
+              >
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="基金行业" :label-width="formLabelWidth">
+              <el-select
+                v-model="funderreviewform.fund_label"
+                clearable
+                filterable
+                allow-create
+                default-first-option
+                placeholder="请选择行业"
+                style="width: 200px"
+              >
+                <el-option
+                  v-for="item in fund_label_option"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :span="5">
+          <el-col :span="12">
+            <el-form-item label="走势预期" :label-width="formLabelWidth">
+              <el-slider
+                :min="-10"
+                :max="10"
+                :step="2.5"
+                show-input
+                show-stops
+                v-model="temp_attitude"
+                style="width: 350px"
+              ></el-slider>
+            </el-form-item>
+          </el-col>
+          <el-col :span="10">
+            <el-form-item label="操作想法" :label-width="formLabelWidth">
+              <el-radio-group v-model="temp_operation" size="mini">
+                <el-radio-button label="大卖"></el-radio-button>
+                <el-radio-button label="小卖"></el-radio-button>
+                <el-radio-button label="不动"></el-radio-button>
+                <el-radio-button label="小买"></el-radio-button>
+                <el-radio-button label="大买"></el-radio-button>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="2">
+            <el-form-item>
+              <el-button
+                @click="addappendix"
+                icon="el-icon-check"
+                type="primary"
+                size="mini"
+              ></el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :span="5">
+          <el-form-item label="review" :label-width="formLabelWidth">
+            <el-input
+              type="textarea"
+              v-model="temp_review"
+              :autosize="{ minRows: 3 }"
+            ></el-input>
+          </el-form-item>
+        </el-row>
+        <el-row>
+          <!-- <el-form-item label="结果表" :label-width="formLabelWidth"> -->
+          <el-table
+            :data="funderreviewform.funder_table"
+            style="width: 90%; left: 5%; right: 5%"
+          >
+            <el-table-column prop="fund_label" label="行业"> </el-table-column>
+            <el-table-column prop="fund_review_attitude" label="预期">
+            </el-table-column>
+            <el-table-column prop="operation" label="操作"> </el-table-column>
+            <el-table-column prop="fund_review" label="review">
+            </el-table-column>
+            <el-table-column label="操作" width="170">
+              <template slot-scope="dirscope">
+                <el-button
+                  @click="
+                    ixdelete(dirscope.$index, funderreviewform.funder_table)
+                  "
+                  type="text"
+                  size="small"
+                  >删除</el-button
+                >
+              </template>
+            </el-table-column>
+          </el-table>
+          <!-- </el-form-item> -->
+        </el-row>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogfunderreviewFormVisible = false"
+          >取 消</el-button
+        >
+        <el-button type="primary" @click="commitfunderreview">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
   
@@ -247,23 +472,34 @@ export default {
     return {
       formLabelWidth: "100px",
       dialogreviewFormVisible: false,
+      dialogfunderreviewFormVisible: false,
       reviewform: {},
+      funderreviewform: {
+        funder_id: null,
+        funder_name: "",
+        fund_review_time: "",
+        fund_label: "",
+        funder_table: [],
+      },
+      fund_label_option: [],
+      temp_attitude: 0,
+      temp_operation: "不动",
+      temp_review: "",
+      temp_funderreviewtable: [],
+      funder_firm_status: false,
       reviewtabledata: [],
       fund_had_option: [],
       fund_had_list: "",
       fund_had_code_selected: "",
       fund_had_name_selected: "",
       funder_option: [],
+      funder_option_list: [],
       funder_selected: "",
       date_selected: "",
       calendar_click: "",
       sform: {},
       calendar_chart: "",
       calendar_option: {
-        // grid: {
-        //   left: "0",
-        //   right: "0",
-        // },
         tooltip: {
           formatter: function (params) {
             return "收益率: " + params.value[1].toFixed(2);
@@ -297,15 +533,14 @@ export default {
         calendar: {
           range: ["2023-03"],
           orient: "vertical",
-          cellSize: [70, 70],
-
+          cellSize: [65, 65],
           seriesIndex: [2],
           yearLabel: {
             show: false,
           },
           dayLabel: {
             firstDay: 1, // 从周一开始
-            nameMap: "cn",
+            show: false,
           },
           monthLabel: {
             show: false,
@@ -322,6 +557,7 @@ export default {
                 var d = echarts.number.parseDate(params.value[0]);
                 return d.getDate() + "\n\n" + params.value[1] + "\n\n";
               },
+              fontSize: 12,
               color: "#000",
             },
             data: [],
@@ -420,6 +656,8 @@ export default {
     init: function () {
       //   console.log("temp");
       this.gethadfund();
+      this.getfunder();
+      this.getfundlabel();
     },
     getreviewtabledata: function () {
       if (this.calendar_click == "") {
@@ -443,6 +681,18 @@ export default {
         .then((response) => {
           this.reviewtabledata = response.data;
         });
+    },
+    addappendix: function () {
+      this.funderreviewform.funder_table.push({
+        fund_label: this.funderreviewform.fund_label,
+        fund_review_attitude: this.temp_attitude,
+        operation: this.temp_operation,
+        fund_review: this.temp_review,
+      });
+      this.funderreviewform.fund_label = null;
+      this.temp_attitude = 0;
+      this.temp_operation = "不动";
+      this.temp_review = "";
     },
     getcalendar: function () {
       if (this.fund_had_code_selected != "" && this.date_selected != "") {
@@ -551,8 +801,35 @@ export default {
         });
     },
     diashowreview: function (event) {
+      console.log(event);
       this.reviewform = event;
       this.dialogreviewFormVisible = true;
+    },
+    getfunder: function () {
+      axios.get("/getfunder").then((response) => {
+        this.funder_option_list = response.data.data_list;
+        this.funder_option = response.data.data;
+      });
+    },
+    getfundlabel: function () {
+      axios.get("/getfundlabel").then((response) => {
+        this.fund_label_option = response.data;
+      });
+    },
+    showdialogfunderreview: function () {
+      if (this.funder_selected == "") {
+        this.$message.error("先选择一个作者");
+        return;
+      }
+      this.funderreviewform.funder_name =
+        this.funder_option_list[this.funder_selected];
+      this.funderreviewform.funder_id = this.funder_selected;
+      this.getfunderreview();
+      this.dialogfunderreviewFormVisible = true;
+    },
+    ixdelete: function (index, rows) {
+      // console.log(rows);
+      rows.splice(index, 1);
     },
     commitreview: function () {
       // console.log(this.reviewform);
@@ -565,6 +842,32 @@ export default {
           this.reviewform = this.$options.data().reviewform;
           this.dialogreviewFormVisible = false;
         });
+    },
+    commitfunderreview: function () {
+      console.log(this.funderreviewform);
+      axios
+        .post("/commitfunderreview", {
+          funderreviewform: this.funderreviewform,
+        })
+        .then((response) => {
+          this.funderreviewform = this.$options.data().funderreviewform;
+          this.dialogfunderreviewFormVisible = false;
+        });
+    },
+    getfunderreview: function () {
+      console.log(this.funderreviewform);
+      axios
+        .post("/getfunderreview", {
+          funder_id: this.funderreviewform.funder_id,
+        })
+        .then((response) => {
+          this.temp_funderreviewtable = response.data;
+        });
+    },
+    getfunderreviewondday: function () {
+      this.funderreviewform.funder_table =
+        this.temp_funderreviewtable[this.funderreviewform.fund_review_time];
+      console.log(this.funderreviewform.fund_review_time);
     },
   },
 };
