@@ -68,7 +68,7 @@ export default {
             axios.defaults.headers.common["Authorization"] =
               response.data.token;
             this.islogin = true;
-            this.$router.push("/syssetting");
+            this.$router.push("/FishTang");
           }
         });
     },

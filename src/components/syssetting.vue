@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <el-col :span="12">
+    <el-col :span="8">
       <el-row :span="5">
         <el-input v-model="new_fund_label" style="width: 450px"></el-input>
         <el-button
@@ -19,7 +19,7 @@
         </el-table>
       </el-row>
     </el-col>
-    <el-col :span="12">
+    <el-col :span="8">
       <el-row :span="5">
         <el-select
           v-model="label_data_selected"
@@ -79,6 +79,58 @@
         </el-table>
       </el-row>
     </el-col>
+    <el-col :span="8">
+      <el-row :span="5">
+        <el-input v-model="author" style="width: 250px"></el-input>
+        <el-select
+          v-model="apps_selected"
+          clearable
+          filterable
+          allow-create
+          default-first-option
+          placeholder="请选择apps"
+          style="width: 200px"
+        >
+          <el-option
+            v-for="item in apps_option"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+        <el-switch
+          v-model="isfirm"
+          active-color="#13ce66"
+          inactive-color="#ff4949"
+        >
+        </el-switch>
+        <el-button
+          type="primary"
+          @click="commitauthor"
+          icon="el-icon-check"
+        ></el-button>
+      </el-row>
+      <el-row :span="5">
+        <el-table :data="authortable">
+          <el-table-column
+            prop="funder_name"
+            label="行业"
+            width="120"
+          ></el-table-column>
+          <el-table-column
+            prop="apps"
+            label="行业"
+            width="120"
+          ></el-table-column>
+          <el-table-column
+            prop="is_firm"
+            label="行业"
+            width="240"
+          ></el-table-column>
+        </el-table>
+      </el-row>
+    </el-col>
   </div>
 </template>
   
@@ -93,7 +145,12 @@ export default {
       fund_label_option: [],
       fund_had_code_selected: "",
       fund_had_option: [],
+      author: "",
+      apps_selected: "",
+      apps_option: [],
       getfundlabeldata: [],
+      authortable: [],
+      isfirm: null,
     };
   },
   mounted: function () {
@@ -105,6 +162,22 @@ export default {
       this.gethadfund();
       this.getfundlabel();
       this.getlabeldata();
+      this.getapps();
+      this.getauthortable();
+    },
+    commitauthor: function () {
+      axios
+        .post("/commitauthor", {
+          author: this.author,
+          apps_selected: this.apps_selected,
+          isfirm: this.isfirm,
+        })
+        .then((response) => {
+          this.author = "";
+          this.apps_selected = "";
+          this.isfirm = null;
+          this.freshall();
+        });
     },
     commitlabel: function () {
       axios
@@ -146,6 +219,16 @@ export default {
     getlabeldata: function () {
       axios.get("/getfundlabeldata").then((response) => {
         this.getfundlabeldata = response.data;
+      });
+    },
+    getauthortable: function () {
+      axios.get("/getauthortable").then((response) => {
+        this.authortable = response.data;
+      });
+    },
+    getapps: function () {
+      axios.get("/getappsoption").then((response) => {
+        this.apps_option = response.data;
       });
     },
   },
