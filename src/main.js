@@ -5,6 +5,7 @@ import App from './App.vue'
 import VueRouter from 'vue-router'
 import FishTang from './components/FishTang.vue'
 import FA from './components/FundAnalysis.vue'
+import syssetting from './components/syssetting.vue'
 import axios from 'axios'
 
 Vue.use(ElementUI)
@@ -18,6 +19,10 @@ const routes = [{
 {
   path: '/FA',
   component: FA
+},
+{
+  path: '/syssetting',
+  component: syssetting
 }
 ]
 
