@@ -71,7 +71,7 @@
             <el-statistic
               group-separator=","
               :precision="2"
-              :value="sform.v1"
+              :value="sform.earn_history"
               style="
                 height: 100px;
                 margin-top: 40px;
@@ -83,7 +83,7 @@
             <el-statistic
               group-separator=","
               :precision="2"
-              :value="sform.v2"
+              :value="sform.earn_sum"
               style="
                 height: 100px;
                 margin-top: 40px;
@@ -95,7 +95,7 @@
             <el-statistic
               group-separator=","
               :precision="2"
-              :value="sform.v3"
+              :value="sform.earn_percent"
               style="
                 height: 100px;
                 margin-top: 40px;
@@ -113,7 +113,7 @@
         <div id="div_one_total" style="height: 450px"></div>
       </el-row>
     </el-col>
-    <el-col :span="12">
+    <el-col :span="14">
       <el-row>
         <el-table
           :data="reviewtabledata"
@@ -138,8 +138,13 @@
             width="60"
           ></el-table-column>
           <el-table-column
+            prop="operation"
+            label="操作"
+            width="60"
+          ></el-table-column>
+          <el-table-column
             prop="fund_review"
-            label="点评"
+            label="总结"
             width="300"
           ></el-table-column>
           <el-table-column prop="isfirm" label="实盘" width="80">
@@ -151,20 +156,86 @@
             width="100"
           >
           </el-table-column>
-
+          <el-table-column
+            prop="review_confidence"
+            sortable
+            label="可信度"
+            width="100"
+          >
+          </el-table-column>
           <el-table-column label="操作" width="80">
             <template slot-scope="scope">
               <el-button
                 @click="diashowreview(scope.row)"
                 type="text"
                 size="small"
-                >复盘</el-button
+                >修改</el-button
               >
             </template>
           </el-table-column>
         </el-table>
       </el-row>
     </el-col>
+    <el-dialog :visible.sync="dialogreviewFormVisible" width="30%">
+      <el-form :model="reviewform">
+        <el-row :span="5">
+          <el-form-item label="基金代码" :label-width="formLabelWidth">
+            <el-input
+              v-model="reviewform.fund_name"
+              disabled
+              style="width: 450px"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="复盘日期" :label-width="formLabelWidth">
+            <el-date-picker
+              v-model="reviewform.fund_review_time"
+              disabled
+              value-format="yyyy-MM-dd"
+              type="date"
+              placeholder="选择日期"
+            >
+            </el-date-picker>
+          </el-form-item>
+        </el-row>
+        <el-row :span="5">
+          <el-form-item label="走势预期" :label-width="formLabelWidth">
+            <el-slider
+              :min="-10"
+              :max="10"
+              :step="2.5"
+              show-input
+              show-stops
+              v-model="reviewform.fund_review_attitude"
+              style="width: 450px"
+            ></el-slider>
+          </el-form-item>
+        </el-row>
+        <el-row :span="5">
+          <el-form-item label="操作想法" :label-width="formLabelWidth">
+            <el-radio-group v-model="reviewform.operation" size="medium">
+              <el-radio label="大卖"></el-radio>
+              <el-radio label="小卖"></el-radio>
+              <el-radio label="不动"></el-radio>
+              <el-radio label="小买"></el-radio>
+              <el-radio label="大买"></el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-row>
+        <el-row :span="5">
+          <el-form-item label="review" :label-width="formLabelWidth">
+            <el-input
+              type="textarea"
+              v-model="reviewform.fund_review"
+              :autosize="{ minRows: 5 }"
+            ></el-input>
+          </el-form-item>
+        </el-row>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogreviewFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="commitreview">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
   
@@ -174,6 +245,9 @@ var echarts = require("echarts");
 export default {
   data() {
     return {
+      formLabelWidth: "100px",
+      dialogreviewFormVisible: false,
+      reviewform: {},
       reviewtabledata: [],
       fund_had_option: [],
       fund_had_list: "",
@@ -183,11 +257,7 @@ export default {
       funder_selected: "",
       date_selected: "",
       calendar_click: "",
-      sform: {
-        v1: 123.11,
-        v2: 123.22,
-        v3: 123.33,
-      },
+      sform: {},
       calendar_chart: "",
       calendar_option: {
         // grid: {
@@ -334,7 +404,6 @@ export default {
       }
     );
     this.calendar_chart.on("click", function (params) {
-      console.log(params.data[0]);
       that.calendar_click = params.data[0];
       that.getreviewtabledata();
     });
@@ -372,7 +441,6 @@ export default {
           fund_review_time: this.calendar_click,
         })
         .then((response) => {
-          console.log(response);
           this.reviewtabledata = response.data;
         });
     },
@@ -389,6 +457,7 @@ export default {
             this.calendar_option.series[1].data = response.data.bs_data;
             this.calendar_option.series[2].data = response.data.data;
             this.calendar_option.calendar.range = this.date_selected;
+            this.sform = response.data.sform;
             // console.log(this.calendar_option);
             this.calendar_chart.setOption(this.calendar_option);
           });
@@ -481,6 +550,22 @@ export default {
           this.one_total_chart.setOption(this.one_total_option);
         });
     },
+    diashowreview: function (event) {
+      this.reviewform = event;
+      this.dialogreviewFormVisible = true;
+    },
+    commitreview: function () {
+      // console.log(this.reviewform);
+      axios
+        .post("/commitreview", {
+          reviewform: this.reviewform,
+          isupdate: true,
+        })
+        .then((response) => {
+          this.reviewform = this.$options.data().reviewform;
+          this.dialogreviewFormVisible = false;
+        });
+    },
   },
 };
 </script>
@@ -491,6 +576,9 @@ export default {
 }
 .el-col {
   border-radius: 4px;
+}
+.formlabelwidth {
+  width: 120px;
 }
 </style>
   
