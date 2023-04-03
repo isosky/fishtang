@@ -41,7 +41,7 @@ export default {
             label: {
               show: true,
               formatter: function (params) {
-                console.log(params);
+                // console.log(params);
                 let arr = [
                   "{name|" + params.treePathInfo[1].name + "}",
                   "{hr|}",
