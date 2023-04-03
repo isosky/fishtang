@@ -10,7 +10,7 @@
         ></el-button>
       </el-row>
       <el-row :span="5">
-        <el-table :data="label_data">
+        <el-table :data="label_data" height="800">
           <el-table-column
             prop="fund_label"
             label="行业"
@@ -60,7 +60,7 @@
         ></el-button>
       </el-row>
       <el-row :span="5">
-        <el-table :data="getfundlabeldata">
+        <el-table :data="getfundlabeldata" height="800">
           <el-table-column
             prop="fund_label"
             label="行业"
@@ -112,7 +112,7 @@
         ></el-button>
       </el-row>
       <el-row :span="5">
-        <el-table :data="authortable">
+        <el-table :data="authortable" height="800">
           <el-table-column
             prop="funder_name"
             label="行业"

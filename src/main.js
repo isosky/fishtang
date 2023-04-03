@@ -5,6 +5,7 @@ import App from './App.vue'
 import VueRouter from 'vue-router'
 import FishTang from './components/FishTang.vue'
 import FA from './components/FundAnalysis.vue'
+import FS from './components/FundSummary.vue'
 import syssetting from './components/syssetting.vue'
 import axios from 'axios'
 
@@ -13,17 +14,21 @@ Vue.use(VueRouter)
 Vue.config.productionTip = false
 
 const routes = [{
-  path: '/FishTang',
-  component: FishTang
-},
-{
-  path: '/FA',
-  component: FA
-},
-{
-  path: '/syssetting',
-  component: syssetting
-}
+    path: '/FishTang',
+    component: FishTang
+  },
+  {
+    path: '/FS',
+    component: FS
+  },
+  {
+    path: '/FA',
+    component: FA
+  },
+  {
+    path: '/syssetting',
+    component: syssetting
+  }
 ]
 
 const router = new VueRouter({
