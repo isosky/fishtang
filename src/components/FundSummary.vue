@@ -38,83 +38,129 @@ export default {
         series: [
           {
             type: "treemap",
-            label: {
-              show: true,
-              formatter: function (params) {
-                // console.log(params);
-                let arr = [
-                  "{name|" + params.treePathInfo[1].name + "}",
-                  "{hr|}",
-                  "{name1|" + params.name + "}",
-                  "{hr|}",
-                  "{budget| " + echarts.format.addCommas(params.value) + "} ",
-                  "{hr|}",
-                  "{budgetpercent| " +
-                    echarts.format.addCommas(
-                      Math.round(params.value / 1000, 2).toString() + "%"
-                    ) +
-                    "} ",
-                ];
-                return arr.join("\n");
-              },
-              rich: {
-                budget: {
-                  fontSize: 22,
-                  lineHeight: 30,
-                  color: "yellow",
-                },
-                budgetpercent: {
-                  fontSize: 22,
-                  lineHeight: 30,
-                  color: "black",
-                },
-                household: {
-                  fontSize: 14,
-                  color: "#fff",
-                },
-                label: {
-                  fontSize: 9,
-                  backgroundColor: "rgba(0,0,0,0.3)",
-                  color: "#fff",
-                  borderRadius: 2,
-                  padding: [2, 4],
-                  lineHeight: 25,
-                  align: "right",
-                },
-                name: {
-                  fontSize: 16,
-                  color: "#fff",
-                },
-                name1: {
-                  fontSize: 12,
-                  color: "#fff",
-                },
-                hr: {
-                  width: "100%",
-                  borderColor: "rgba(255,255,255,0.2)",
-                  borderWidth: 0.5,
-                  height: 0,
-                  lineHeight: 10,
-                },
-              },
-            },
+            top: "3%",
+            left: "2%",
+            right: "2%",
+            bottom: "3%",
             levels: [
               {
                 itemStyle: {
+                  borderColor: "#777",
                   borderWidth: 0,
-                  gapWidth: 5,
-                },
-              },
-              {
-                itemStyle: {
                   gapWidth: 1,
                 },
+                upperLabel: {
+                  show: true,
+                },
+                label: {
+                  formatter: function (params) {
+                    // console.log(params);
+                  },
+                },
               },
               {
-                colorSaturation: [0.35, 0.5],
                 itemStyle: {
+                  borderColor: "#555",
+                  borderWidth: 5,
+                  gapWidth: 1,
+                },
+                emphasis: {
+                  itemStyle: {
+                    borderColor: "#ddd",
+                  },
+                },
+                upperLabel: {
+                  show: true,
+                },
+              },
+              {
+                colorSaturation: [0.4],
+                itemStyle: {
+                  borderWidth: 5,
                   gapWidth: 1,
                   borderColorSaturation: 0.6,
+                },
+                upperLabel: {
+                  show: true,
+                },
+                label: {
+                  formatter: function (params) {
+                    console.log(params);
+                    let arr = [
+                      params.name,
+                      echarts.format.addCommas(params.value),
+                      echarts.format.addCommas(
+                        Math.round(params.value / 1000, 2).toString() + "%"
+                      ),
+                    ];
+                    return arr.join("\n");
+                  },
+                },
+              },
+              {
+                colorSaturation: [0.4],
+                itemStyle: {
+                  borderWidth: 5,
+                  gapWidth: 1,
+                  borderColorSaturation: 0.6,
+                },
+                // upperLabel: {
+                //   show: true,
+                // },
+                label: {
+                  formatter: function (params) {
+                    // console.log(params);
+                    let arr = [
+                      params.name,
+                      "{budget|" + echarts.format.addCommas(params.value) + "}",
+                      "{budgetpercent|" +
+                        echarts.format.addCommas(
+                          Math.round(params.value / 1000, 2).toString() + "%"
+                        ) +
+                        "}",
+                    ];
+                    return arr.join("\n");
+                  },
+                  rich: {
+                    budget: {
+                      fontSize: 22,
+                      lineHeight: 30,
+                      color: "yellow",
+                    },
+                    budgetpercent: {
+                      fontSize: 22,
+                      lineHeight: 30,
+                      color: "black",
+                    },
+                    household: {
+                      fontSize: 14,
+                      color: "#fff",
+                    },
+                    label: {
+                      fontSize: 9,
+                      backgroundColor: "rgba(0,0,0,0.3)",
+                      color: "#fff",
+                      borderRadius: 2,
+                      padding: [2, 4],
+                      lineHeight: 25,
+                      align: "right",
+                    },
+                    name: {
+                      fontSize: 16,
+                      color: "#fff",
+                    },
+                    name1: {
+                      fontSize: 12,
+                      color: "#fff",
+                    },
+                    hr: {
+                      width: "100%",
+                      borderColor: "rgba(255,255,255,0.2)",
+                      borderWidth: 0.5,
+                      height: 0,
+                      lineHeight: 10,
+                    },
+                  },
                 },
               },
             ],
