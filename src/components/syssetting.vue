@@ -60,7 +60,15 @@
         ></el-button>
       </el-row>
       <el-row :span="5">
-        <el-table :data="getfundlabeldata" height="800">
+        <el-table
+          :data="
+            getfundlabeldata.filter(
+              (v) =>
+                v.fund_code == fund_had_code_selected || !fund_had_code_selected
+            )
+          "
+          height="800"
+        >
           <el-table-column
             prop="fund_label"
             label="行业"
@@ -68,12 +76,12 @@
           ></el-table-column>
           <el-table-column
             prop="fund_code"
-            label="行业"
+            label="基金代码"
             width="120"
           ></el-table-column>
           <el-table-column
             prop="fund_name"
-            label="行业"
+            label="基金名称"
             width="240"
           ></el-table-column>
         </el-table>
@@ -115,7 +123,7 @@
         <el-table :data="authortable" height="800">
           <el-table-column
             prop="funder_name"
-            label="行业"
+            label="作者"
             width="120"
           ></el-table-column>
           <el-table-column

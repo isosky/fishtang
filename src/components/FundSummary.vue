@@ -138,9 +138,10 @@ export default {
   methods: {
     init: function () {
       axios.get("/gethadtreemap").then((response) => {
-        console.log(response);
+        // console.log(response);
         this.treemap_fund_had_option.series[0].data = response.data;
         this.treemap_fund_had_chart.setOption(this.treemap_fund_had_option);
+        // console.log(this.treemap_fund_had_chart.getDataURL());
       });
     },
   },
