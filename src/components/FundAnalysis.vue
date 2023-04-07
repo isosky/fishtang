@@ -29,23 +29,7 @@
           >
           </el-date-picker
         ></el-col>
-        <el-col :span="5">
-          <el-select
-            v-model="funder_selected"
-            @change="getfirmdata"
-            clearable
-            filterable
-            default-first-option
-            placeholder="请选择作者"
-          >
-            <el-option
-              v-for="item in funder_option"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option> </el-select></el-col
-        ><el-col :span="10">
+        <el-col :span="10">
           <el-button-group>
             <el-tooltip
               class="item"
@@ -70,28 +54,7 @@
                 @click="nextmonth"
                 icon="el-icon-arrow-right"
               ></el-button>
-            </el-tooltip>
-            <el-button type="primary" icon="el-icon-refresh"></el-button>
-            <el-tooltip
-              class="item"
-              effect="dark"
-              content="增加作者复盘"
-              placement="bottom-end"
-            >
-              <el-button
-                type="primary"
-                icon="el-icon-plus"
-                @click="showdialogfunderreview"
-              ></el-button
-            ></el-tooltip>
-            <el-tooltip
-              class="item"
-              effect="dark"
-              content="增加实盘"
-              placement="bottom-end"
-            >
-              <el-button type="primary" icon="el-icon-coin"></el-button
-            ></el-tooltip> </el-button-group
+            </el-tooltip> </el-button-group
         ></el-col>
       </el-row>
       <el-row style="height: 450px">
@@ -102,8 +65,8 @@
               :precision="2"
               :value="sform.earn_history"
               style="
-                height: 100px;
-                margin-top: 40px;
+                height: 50px;
+                margin-top: 30px;
                 font-size: 30px;
                 text-align: center;
               "
@@ -114,8 +77,8 @@
               :precision="2"
               :value="sform.earn_sum"
               style="
-                height: 100px;
-                margin-top: 40px;
+                height: 50px;
+                margin-top: 30px;
                 font-size: 30px;
                 text-align: center;
               "
@@ -126,13 +89,24 @@
               :precision="2"
               :value="sform.earn_percent"
               style="
-                height: 100px;
-                margin-top: 40px;
+                height: 50px;
+                margin-top: 30px;
                 font-size: 30px;
                 text-align: center;
               "
               title="持有收益率"
             ></el-statistic>
+            <el-statistic
+              title="基金行业"
+              style="
+                height: 50px;
+                margin-top: 30px;
+                font-size: 30px;
+                text-align: center;
+              "
+            >
+              <template slot="formatter">{{ sform.fund_label }}</template>
+            </el-statistic>
           </div> </el-col
         ><el-col :span="18">
           <div id="calendar_div" style="height: 450px"></div>
@@ -143,13 +117,73 @@
       </el-row>
     </el-col>
     <el-col :span="14">
+      <el-row :span="5">
+        <el-col :span="5">
+          <el-select
+            v-model="funder_selected"
+            @change="getfirmdata"
+            clearable
+            filterable
+            default-first-option
+            placeholder="请选择作者"
+          >
+            <el-option
+              v-for="item in funder_option"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option> </el-select
+        ></el-col>
+        <el-col :span="5">
+          <el-select
+            v-model="fund_label_selected"
+            @change="testss"
+            clearable
+            filterable
+            default-first-option
+            placeholder="请选择行业"
+          >
+            <el-option
+              v-for="item in fund_label_option"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option> </el-select></el-col
+        ><el-button-group>
+          <el-button type="primary" icon="el-icon-refresh"></el-button>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="增加作者复盘"
+            placement="bottom-end"
+          >
+            <el-button
+              type="primary"
+              icon="el-icon-plus"
+              @click="showdialogfunderreview"
+            ></el-button
+          ></el-tooltip>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="增加实盘"
+            placement="bottom-end"
+          >
+            <el-button
+              type="primary"
+              icon="el-icon-coin"
+            ></el-button></el-tooltip
+        ></el-button-group>
+      </el-row>
       <el-row>
+        <!-- TODO 这块的过滤怎么弄 -->
         <el-table
           :data="
             reviewtabledata.filter(
               (v) =>
-                v.funder_id == funder_selected ||
-                !funder_selected ||
+                (v.funder_id == funder_selected && !funder_selected) ||
                 v.funder_id == 1
             )
           "
@@ -503,6 +537,7 @@ export default {
       funder_option: [],
       funder_option_list: [],
       funder_selected: "",
+      fund_label_selected: null,
       date_selected: "",
       calendar_click: "",
       sform: {},
@@ -688,6 +723,7 @@ export default {
         })
         .then((response) => {
           this.reviewtabledata = response.data;
+          console.log(this.reviewtabledata);
         });
     },
     addappendix: function () {
@@ -892,12 +928,20 @@ export default {
         });
     },
     getfirmdata: function () {
+      console.log(this.funder_selected);
+      if (this.funder_selected == "") {
+        this.showfirm = 0;
+        return;
+      }
       let funder_name = this.funder_option_list[this.funder_selected];
       if (funder_name.indexOf("实盘") != -1) {
         this.showfirm = 1;
       } else {
         this.showfirm = 0;
       }
+    },
+    testss: function () {
+      console.log(this.fund_label_selected);
     },
     getfunderreviewondday: function () {
       if (
