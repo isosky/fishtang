@@ -38,11 +38,25 @@
           @row-click="industryselect"
           :default-sort="{ prop: 'zhangfu', order: 'descending' }"
         >
-          <el-table-column
-            label="行业"
-            prop="cname"
-            width="120"
-          ></el-table-column>
+          <el-table-column label="行业" width="120">
+            <template slot-scope="scope">
+              <el-popover placement="right" trigger="hover">
+                <el-table :data="scope.row.ind_fund_list">
+                  <el-table-column
+                    width="150"
+                    property="fund_code"
+                    label="基金名称"
+                  ></el-table-column>
+                  <el-table-column
+                    width="300"
+                    property="fund_name"
+                    label="基金代码"
+                  ></el-table-column>
+                </el-table>
+                <p slot="reference">{{ scope.row.cname }}</p>
+              </el-popover>
+            </template></el-table-column
+          >
           <el-table-column
             label="涨幅"
             prop="zhangfu"
