@@ -178,11 +178,10 @@
         ></el-button-group>
       </el-row>
       <el-row>
-        <!-- TODO 这块的过滤怎么弄，要不然还是单独写个条件吧 -->
         <el-table
           :data="reviewtabledata"
           style="width: 100%"
-          height="500"
+          height="700"
           :cell-style="pricestyle"
           ref="reviewtabledata"
         >
@@ -191,9 +190,14 @@
             label="行业"
             width="120"
           ></el-table-column>
-          <el-table-column prop="apps" label="来源" width="80">
+          <el-table-column
+            prop="fund_name"
+            label="基金名称"
+            sortable
+            width="160"
+          >
           </el-table-column>
-          <el-table-column prop="funder_name" label="作者" width="120">
+          <el-table-column prop="funder_name" sortable label="作者" width="120">
           </el-table-column>
           <el-table-column
             prop="fund_review_attitude"
@@ -208,17 +212,16 @@
           <el-table-column
             prop="fund_review"
             label="总结"
-            width="300"
+            width="360"
           ></el-table-column>
-          <el-table-column prop="isfirm" label="实盘" width="80">
-          </el-table-column>
           <el-table-column
-            prop="earn_percent"
-            sortable
-            label="收益率"
-            width="100"
+            prop="isfirm"
+            label="实盘"
+            width="80"
+            :formatter="isformat"
           >
           </el-table-column>
+
           <el-table-column
             prop="review_confidence"
             sortable
@@ -986,6 +989,13 @@ export default {
       ) {
         this.funderreviewform.funder_table =
           this.temp_funderreviewtable[this.funderreviewform.fund_review_time];
+      }
+    },
+    isformat: function (row, index) {
+      if (row.isfirm == 1) {
+        return "是";
+      } else {
+        return "否";
       }
     },
   },
