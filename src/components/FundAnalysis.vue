@@ -121,7 +121,7 @@
         <el-col :span="5">
           <el-select
             v-model="funder_selected"
-            @change="getfirmdata"
+            @change="filtertable"
             clearable
             filterable
             default-first-option
@@ -138,7 +138,7 @@
         <el-col :span="5">
           <el-select
             v-model="fund_label_selected"
-            @change="testss"
+            @change="filtertable"
             clearable
             filterable
             default-first-option
@@ -178,15 +178,9 @@
         ></el-button-group>
       </el-row>
       <el-row>
-        <!-- TODO 这块的过滤怎么弄 -->
+        <!-- TODO 这块的过滤怎么弄，要不然还是单独写个条件吧 -->
         <el-table
-          :data="
-            reviewtabledata.filter(
-              (v) =>
-                (v.funder_id == funder_selected && !funder_selected) ||
-                v.funder_id == 1
-            )
-          "
+          :data="reviewtabledata"
           style="width: 100%"
           height="500"
           :cell-style="pricestyle"
@@ -531,6 +525,7 @@ export default {
       temp_review: "",
       temp_funderreviewtable: [],
       reviewtabledata: [],
+      orgreviewtabledata: [],
       fund_had_option: [],
       fund_had_list: "",
       fund_had_code_selected: "",
@@ -538,7 +533,7 @@ export default {
       funder_option: [],
       funder_option_list: [],
       funder_selected: "",
-      fund_label_selected: null,
+      fund_label_selected: "",
       date_selected: "",
       calendar_click: "",
       sform: {},
@@ -724,8 +719,9 @@ export default {
         })
         .then((response) => {
           this.reviewtabledata = response.data;
-          console.log(this.reviewtabledata);
+          this.orgreviewtabledata = response.data;
         });
+      return;
     },
     addappendix: function () {
       this.funderreviewform.funder_table.push({
@@ -932,6 +928,7 @@ export default {
       console.log(this.funder_selected);
       if (this.funder_selected == "") {
         this.showfirm = 0;
+        console.log("为空");
         return;
       }
       let funder_name = this.funder_option_list[this.funder_selected];
@@ -941,8 +938,47 @@ export default {
         this.showfirm = 0;
       }
     },
-    testss: function () {
+    filtertable: function () {
+      console.log(this.funder_selected);
       console.log(this.fund_label_selected);
+      if (this.funder_selected == "" && this.fund_label_selected == "") {
+        this.getreviewtabledata();
+        return;
+      }
+      console.log("开始判断");
+      let temp_list = this.orgreviewtabledata;
+      this.reviewtabledata = [];
+      for (var i in temp_list) {
+        if (temp_list[i].funder_id == 1) {
+          console.log("我的");
+          this.reviewtabledata.push(temp_list[i]);
+          continue;
+        }
+        if (this.funder_selected != "" && this.fund_label_selected == "") {
+          console.log("开始判断作者");
+          if (temp_list[i].funder_id == this.funder_selected) {
+            this.reviewtabledata.push(temp_list[i]);
+            continue;
+          }
+        }
+        if (this.fund_label_selected != "" && this.funder_selected == "") {
+          console.log("开始行业");
+          if (temp_list[i].fund_label == this.fund_label_selected) {
+            this.reviewtabledata.push(temp_list[i]);
+            continue;
+          }
+        }
+        if (this.fund_label_selected != "" && this.funder_selected != "") {
+          console.log("开始判断作者和行业");
+          if (
+            temp_list[i].fund_label == this.fund_label_selected &&
+            temp_list[i].funder_id == this.funder_selected
+          ) {
+            this.reviewtabledata.push(temp_list[i]);
+            continue;
+          }
+        }
+      }
     },
     getfunderreviewondday: function () {
       if (
