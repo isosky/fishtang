@@ -12,7 +12,6 @@
         </el-date-picker>
         <el-select
           v-model="funder_industry_selected"
-          @change="getfirmdata"
           clearable
           filterable
           default-first-option
