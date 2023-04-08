@@ -12,12 +12,15 @@
             <i class="el-icon-money"></i>
           </el-menu-item>
           <el-menu-item index="2">
-            <i class="el-icon-aim"></i>
+            <i class="el-icon-data-analysis"></i>
           </el-menu-item>
           <el-menu-item index="3">
-            <i class="el-icon-monitor"></i>
+            <i class="el-icon-aim"></i>
           </el-menu-item>
           <el-menu-item index="4">
+            <i class="el-icon-monitor"></i>
+          </el-menu-item>
+          <el-menu-item index="5">
             <i class="el-icon-setting"></i>
           </el-menu-item>
         </el-menu>
@@ -51,7 +54,7 @@ export default {
       islogin: false,
       defaultactive: "1",
       isCollapse: true,
-      routers: ["/FishTang", "/FS", "/FA", "/syssetting"],
+      routers: ["/FishTang", "/FI", "/FS", "/FA", "/syssetting"],
       todo_user_name: "",
       todo_user_pass: "",
     };
@@ -71,7 +74,7 @@ export default {
             axios.defaults.headers.common["Authorization"] =
               response.data.token;
             this.islogin = true;
-            this.$router.push("/FishTang");
+            this.$router.push("/FI");
           }
         });
     },

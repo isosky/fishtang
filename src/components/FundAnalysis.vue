@@ -244,7 +244,8 @@
           </el-table-column>
         </el-table>
       </el-row>
-      <el-row v-if="showfirm == 1"
+      <!-- TODO 实盘怎么弄，待规划 -->
+      <el-row v-if="false"
         ><el-header style="text-align: left; font-size: 20px"
           ><span>实盘</span></el-header
         >

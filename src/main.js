@@ -5,6 +5,7 @@ import App from './App.vue'
 import VueRouter from 'vue-router'
 import FishTang from './components/FishTang.vue'
 import FA from './components/FundAnalysis.vue'
+import FI from './components/FundIndustry.vue'
 import FS from './components/FundSummary.vue'
 import syssetting from './components/syssetting.vue'
 import axios from 'axios'
@@ -20,6 +21,10 @@ const routes = [{
   {
     path: '/FS',
     component: FS
+  },
+  {
+    path: '/FI',
+    component: FI
   },
   {
     path: '/FA',
