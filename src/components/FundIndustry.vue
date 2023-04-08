@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <el-col :span="8"
+    <el-col :span="9"
       ><el-row>
         <el-date-picker
           v-model="check_time_select"
@@ -9,11 +9,32 @@
           placeholder="选择日期时间"
           value-format="yyyy-MM-dd"
         >
-        </el-date-picker> </el-row
+        </el-date-picker>
+        <el-select
+          v-model="funder_industry_selected"
+          @change="getfirmdata"
+          clearable
+          filterable
+          default-first-option
+          placeholder="请选择行业"
+        >
+          <el-option
+            v-for="item in fundindustrydata"
+            :key="item.cname"
+            :label="item.cname"
+            :value="item.cname"
+          >
+          </el-option>
+        </el-select> </el-row
       ><el-row>
         <el-table
-          :data="fundindustrydata"
-          height="855"
+          :data="
+            fundindustrydata.filter(
+              (v) =>
+                v.cname == funder_industry_selected || !funder_industry_selected
+            )
+          "
+          height="925"
           :cell-style="pricestyle"
           @row-click="industryselect"
           :default-sort="{ prop: 'zhangfu', order: 'descending' }"
@@ -59,11 +80,22 @@
             sortable
             width="90"
           ></el-table-column>
-        </el-table> </el-row
-    ></el-col>
-    <el-col :span="16">
+          <el-table-column prop="url_org" label="链接" width="80">
+            <template scope="scope">
+              <a
+                :href="scope.row.url_org"
+                target="_blank"
+                style="text-decoration: none"
+                >链接</a
+              >
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-row></el-col
+    >
+    <el-col :span="15">
       <el-row :span="5">
-        <div id="k_ccode_div" style="height: 920px"></div
+        <div id="k_ccode_div" style="height: 990px"></div
       ></el-row>
     </el-col>
   </div>
@@ -76,6 +108,7 @@ var echarts = require("echarts");
 export default {
   data() {
     return {
+      funder_industry_selected: "",
       check_time_select: "",
       fundindustrydata: [],
       chartdata: null,
@@ -84,6 +117,10 @@ export default {
       k_ccode_option: {
         title: {
           text: "",
+          left: "48%",
+          textStyle: {
+            fontSize: 30,
+          },
         },
         animation: false,
         legend: {
