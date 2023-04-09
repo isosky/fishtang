@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <el-col :span="8">
+    <el-col :span="3">
       <el-row :span="5">
-        <el-input v-model="new_fund_label" style="width: 450px"></el-input>
+        <el-input v-model="new_fund_label" style="width: 100px"></el-input>
         <el-button
           type="primary"
           @click="commitlabel"
@@ -19,7 +19,7 @@
         </el-table>
       </el-row>
     </el-col>
-    <el-col :span="8">
+    <el-col :span="6">
       <el-row :span="5">
         <el-select
           v-model="label_data_selected"
@@ -87,9 +87,9 @@
         </el-table>
       </el-row>
     </el-col>
-    <el-col :span="8">
+    <el-col :span="6">
       <el-row :span="5">
-        <el-input v-model="author" style="width: 250px"></el-input>
+        <el-input v-model="author" style="width: 200px"></el-input>
         <el-select
           v-model="apps_selected"
           clearable
@@ -124,7 +124,7 @@
           <el-table-column
             prop="funder_name"
             label="作者"
-            width="120"
+            width="160"
           ></el-table-column>
           <el-table-column
             prop="apps"
@@ -136,6 +136,39 @@
             label="实盘"
             width="120"
             :formatter="isformat"
+          ></el-table-column>
+        </el-table>
+      </el-row>
+    </el-col>
+    <el-col :span="6">
+      <el-row :span="5">
+        <el-input
+          v-model="zcode"
+          style="width: 200px"
+          placeholder="请输入中证code"
+        ></el-input>
+        <el-input
+          v-model="zname"
+          style="width: 200px"
+          placeholder="请输入中证名称"
+        ></el-input>
+        <el-button
+          type="primary"
+          @click="commitzzzslist"
+          icon="el-icon-check"
+        ></el-button>
+      </el-row>
+      <el-row :span="5">
+        <el-table :data="zztabledata" height="800">
+          <el-table-column
+            prop="zcode"
+            label="行业"
+            width="200"
+          ></el-table-column>
+          <el-table-column
+            prop="zname"
+            label="基金代码"
+            width="200"
           ></el-table-column>
         </el-table>
       </el-row>
@@ -160,6 +193,9 @@ export default {
       getfundlabeldata: [],
       authortable: [],
       isfirm: null,
+      zcode: "",
+      zname: "",
+      zztabledata: [],
     };
   },
   mounted: function () {
@@ -172,6 +208,7 @@ export default {
       this.getfundlabel();
       this.getlabeldata();
       this.getapps();
+      this.getzzzslist();
       this.getauthortable();
     },
     commitauthor: function () {
@@ -207,6 +244,23 @@ export default {
         .then((response) => {
           this.label_data_selected = "";
           this.fund_had_code_selected = "";
+          this.freshall();
+        });
+    },
+    getzzzslist: function () {
+      axios.get("/getzzzslist").then((response) => {
+        this.zztabledata = response.data;
+      });
+    },
+    commitzzzslist: function () {
+      axios
+        .post("/commitzzzslist", {
+          zcode: this.zcode,
+          zname: this.zname,
+        })
+        .then((response) => {
+          this.zcode = "";
+          this.zname = "";
           this.freshall();
         });
     },

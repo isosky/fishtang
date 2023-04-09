@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <el-col :span="9"
+    <el-col :span="10"
       ><el-row>
         <el-date-picker
           v-model="check_time_select"
@@ -37,7 +37,25 @@
           :cell-style="pricestyle"
           @row-click="industryselect"
           :default-sort="{ prop: 'zhangfu', order: 'descending' }"
-        >
+          ><el-table-column
+            prop="types"
+            label="分类"
+            width="80"
+            :filters="[
+              { text: '中证', value: '中证' },
+              { text: '板块', value: '板块' },
+            ]"
+            :filter-method="filterTag"
+            filter-placement="bottom-end"
+          >
+            <template slot-scope="scope">
+              <el-tag
+                :type="scope.row.types === '中证' ? 'primary' : 'success'"
+                disable-transitions
+                >{{ scope.row.types }}</el-tag
+              >
+            </template></el-table-column
+          >
           <el-table-column prop="cname" label="行业" width="120">
           </el-table-column>
           <el-table-column
@@ -107,7 +125,7 @@
         </el-table>
       </el-row></el-col
     >
-    <el-col :span="15">
+    <el-col :span="14">
       <el-row :span="5">
         <div id="k_ccode_div" style="height: 990px"></div
       ></el-row>
@@ -408,6 +426,9 @@ export default {
           this.code_select = this.fundindustrydata[0].ccode;
           this.industryselect();
         });
+    },
+    filterTag(value, row) {
+      return row.types === value;
     },
   },
 };
