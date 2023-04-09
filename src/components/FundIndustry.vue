@@ -38,25 +38,8 @@
           @row-click="industryselect"
           :default-sort="{ prop: 'zhangfu', order: 'descending' }"
         >
-          <el-table-column label="行业" width="120">
-            <template slot-scope="scope">
-              <el-popover placement="right" trigger="hover">
-                <el-table :data="scope.row.ind_fund_list">
-                  <el-table-column
-                    width="150"
-                    property="fund_code"
-                    label="基金名称"
-                  ></el-table-column>
-                  <el-table-column
-                    width="300"
-                    property="fund_name"
-                    label="基金代码"
-                  ></el-table-column>
-                </el-table>
-                <p slot="reference">{{ scope.row.cname }}</p>
-              </el-popover>
-            </template></el-table-column
-          >
+          <el-table-column prop="cname" label="行业" width="120">
+          </el-table-column>
           <el-table-column
             label="涨幅"
             prop="zhangfu"
@@ -87,12 +70,30 @@
             sortable
             width="90"
           ></el-table-column>
-          <el-table-column
-            label="3天"
-            prop="to3zllr"
-            sortable
-            width="90"
-          ></el-table-column>
+          <el-table-column label="包含" prop="contains" sortable width="90">
+            <template slot-scope="scope">
+              <el-popover placement="right" trigger="hover">
+                <el-table :data="scope.row.ind_fund_list">
+                  <el-table-column
+                    width="150"
+                    property="fund_code"
+                    label="基金名称"
+                  ></el-table-column>
+                  <el-table-column
+                    width="300"
+                    property="fund_name"
+                    label="基金代码"
+                  ></el-table-column>
+                  <el-table-column
+                    width="60"
+                    property="percent_sum"
+                    label="持仓"
+                  ></el-table-column>
+                </el-table>
+                <p slot="reference">{{ scope.row.contains }}</p>
+              </el-popover>
+            </template></el-table-column
+          >
           <el-table-column prop="url_org" label="链接" width="80">
             <template scope="scope">
               <a
