@@ -350,11 +350,11 @@
         <el-row :span="5">
           <el-form-item label="操作想法" :label-width="formLabelWidth">
             <el-radio-group v-model="reviewform.operation" size="medium">
-              <el-radio label="大卖"></el-radio>
-              <el-radio label="小卖"></el-radio>
-              <el-radio label="不动"></el-radio>
-              <el-radio label="小买"></el-radio>
-              <el-radio label="大买"></el-radio>
+              <el-radio label="退场"></el-radio>
+              <el-radio label="低吸"></el-radio>
+              <el-radio label="观望"></el-radio>
+              <el-radio label="加仓"></el-radio>
+              <el-radio label="止盈"></el-radio>
             </el-radio-group>
           </el-form-item>
         </el-row>
@@ -437,11 +437,11 @@
           <el-col :span="10">
             <el-form-item label="操作想法" :label-width="formLabelWidth">
               <el-radio-group v-model="temp_operation" size="mini">
-                <el-radio-button label="大卖"></el-radio-button>
-                <el-radio-button label="小卖"></el-radio-button>
-                <el-radio-button label="不动"></el-radio-button>
-                <el-radio-button label="小买"></el-radio-button>
-                <el-radio-button label="大买"></el-radio-button>
+                <el-radio-button label="退场"></el-radio-button>
+                <el-radio-button label="低吸"></el-radio-button>
+                <el-radio-button label="观望"></el-radio-button>
+                <el-radio-button label="加仓"></el-radio-button>
+                <el-radio-button label="止盈"></el-radio-button>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -524,7 +524,7 @@ export default {
       showonefund: 1,
       showfirm: 0,
       temp_attitude: 0,
-      temp_operation: "不动",
+      temp_operation: "观望",
       temp_review: "",
       temp_funderreviewtable: [],
       reviewtabledata: [],
@@ -735,7 +735,7 @@ export default {
       });
       this.funderreviewform.fund_label = null;
       this.temp_attitude = 0;
-      this.temp_operation = "不动";
+      this.temp_operation = "观望";
       this.temp_review = "";
     },
     getcalendar: function () {
