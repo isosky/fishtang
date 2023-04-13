@@ -115,7 +115,7 @@ export default {
                       "{budget|" + echarts.format.addCommas(params.value) + "}",
                       "{budgetpercent|" +
                         echarts.format.addCommas(
-                          Math.round(params.value / 1000, 2).toString() + "%"
+                          (params.value / 1000).toFixed(2) + "%"
                         ) +
                         "}",
                     ];
