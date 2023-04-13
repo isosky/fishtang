@@ -90,7 +90,7 @@ export default {
                       params.name,
                       echarts.format.addCommas(params.value),
                       echarts.format.addCommas(
-                        Math.round(params.value / 1000, 2).toString() + "%"
+                        (params.value / 1000).toFixed(2) + "%"
                       ),
                     ];
                     return arr.join("\n");
