@@ -18,7 +18,7 @@
           placeholder="请选择行业"
         >
           <el-option
-            v-for="item in fundindustrydata"
+            v-for="item in funddisindustrydata"
             :key="item.cname"
             :label="item.cname"
             :value="item.cname"
@@ -143,6 +143,7 @@ export default {
       funder_industry_selected: "",
       check_time_select: "",
       fundindustrydata: [],
+      funddisindustrydata: [],
       chartdata: null,
       k_ccode_chart: "",
       code_select: "",
@@ -399,6 +400,10 @@ export default {
       if (row !== undefined) {
         this.code_select = row.ccode;
       }
+      if (this.code_select == "") {
+        this.k_ccode_chart.clear();
+        return;
+      }
       axios
         .post("/getchartdata", { ccode: this.code_select })
         .then((response) => {
@@ -421,8 +426,23 @@ export default {
       axios
         .post("/getfundindustrydata", { check_time: this.check_time_select })
         .then((response) => {
-          //   console.log(response);
-          this.fundindustrydata = response.data;
+          // console.log(response);
+          if (response == []) {
+            this.code_select = "";
+            this.fundindustrydata = [];
+            this.funddisindustrydata = [];
+            this.industryselect();
+            return;
+          }
+          if (response.data.data.length == 0) {
+            this.code_select = "";
+            this.fundindustrydata = [];
+            this.funddisindustrydata = [];
+            this.industryselect();
+            return;
+          }
+          this.fundindustrydata = response.data.data;
+          this.funddisindustrydata = response.data.option;
           this.code_select = this.fundindustrydata[0].ccode;
           this.industryselect();
         });
