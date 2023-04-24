@@ -34,13 +34,13 @@
           </el-table-column>
           <!-- <el-table-column prop="fund_type" label="类型" width="100">
           </el-table-column> -->
-          <el-table-column prop="to7day" sortable label="近7天" width="100">
+          <el-table-column prop="to7day" sortable label="7天" width="100">
           </el-table-column>
-          <el-table-column prop="to30day" label="近30天" width="80">
+          <el-table-column prop="to30day" sortable label="30天" width="80">
           </el-table-column>
-          <el-table-column prop="to90day" label="近90天" width="80">
+          <el-table-column prop="to90day" sortable label="90天" width="80">
           </el-table-column>
-          <el-table-column prop="to180day" label="近180天" width="80">
+          <el-table-column prop="to180day" sortable label="180天" width="90">
           </el-table-column>
           <el-table-column
             prop="earn_percent"
@@ -227,8 +227,9 @@ export default {
       });
     },
     filterTag(value, row) {
-      // TODO 判断undefined
-      // console.log(row.fund_label);
+      if (row.fund_label == "undefined") {
+        return;
+      }
       // console.log(~row.fund_label.indexOf(value));
       return row.fund_label === value;
     },
