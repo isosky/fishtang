@@ -85,7 +85,7 @@ export default {
                 },
                 label: {
                   formatter: function (params) {
-                    console.log(params);
+                    // console.log(params);
                     let arr = [
                       params.name,
                       echarts.format.addCommas(params.value),

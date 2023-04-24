@@ -375,7 +375,7 @@ export default {
       }
     },
     getcheckdata: function () {
-      console.log(this.check_time_select);
+      // console.log(this.check_time_select);
       this.getfundindustrydata();
     },
     // todo 待优化

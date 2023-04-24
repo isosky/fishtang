@@ -740,7 +740,7 @@ export default {
     },
     getcalendar: function () {
       if (this.fund_had_code_selected != "" && this.date_selected != "") {
-        console.log("我的某个基金");
+        // console.log("我的某个基金");
         this.showonefund = 1;
         axios
           .post("/getfundcalendar", {
@@ -762,7 +762,7 @@ export default {
       }
       if (this.fund_had_code_selected == "" && this.date_selected != "") {
         this.showonefund = 0;
-        console.log("某个博主");
+        // console.log("某个博主");
         axios
           .post("/getfundcalendar", {
             funder_selected: this.funder_selected,
@@ -864,7 +864,7 @@ export default {
         });
     },
     diashowreview: function (event) {
-      console.log(event);
+      // console.log(event);
       this.reviewform = event;
       this.dialogreviewFormVisible = true;
     },
@@ -907,7 +907,7 @@ export default {
         });
     },
     commitfunderreview: function () {
-      console.log(this.funderreviewform);
+      // console.log(this.funderreviewform);
       axios
         .post("/commitfunderreview", {
           funderreviewform: this.funderreviewform,
@@ -918,7 +918,7 @@ export default {
         });
     },
     getfunderreview: function () {
-      console.log(this.funderreviewform);
+      // console.log(this.funderreviewform);
       axios
         .post("/getfunderreview", {
           funder_id: this.funderreviewform.funder_id,
@@ -928,10 +928,10 @@ export default {
         });
     },
     getfirmdata: function () {
-      console.log(this.funder_selected);
+      // console.log(this.funder_selected);
       if (this.funder_selected == "") {
         this.showfirm = 0;
-        console.log("为空");
+        // console.log("为空");
         return;
       }
       let funder_name = this.funder_option_list[this.funder_selected];
@@ -942,37 +942,37 @@ export default {
       }
     },
     filtertable: function () {
-      console.log(this.funder_selected);
-      console.log(this.fund_label_selected);
+      // console.log(this.funder_selected);
+      // console.log(this.fund_label_selected);
       if (this.funder_selected == "" && this.fund_label_selected == "") {
         this.getreviewtabledata();
         return;
       }
-      console.log("开始判断");
+      // console.log("开始判断");
       let temp_list = this.orgreviewtabledata;
       this.reviewtabledata = [];
       for (var i in temp_list) {
         if (temp_list[i].funder_id == 1) {
-          console.log("我的");
+          // console.log("我的");
           this.reviewtabledata.push(temp_list[i]);
           continue;
         }
         if (this.funder_selected != "" && this.fund_label_selected == "") {
-          console.log("开始判断作者");
+          // console.log("开始判断作者");
           if (temp_list[i].funder_id == this.funder_selected) {
             this.reviewtabledata.push(temp_list[i]);
             continue;
           }
         }
         if (this.fund_label_selected != "" && this.funder_selected == "") {
-          console.log("开始行业");
+          // console.log("开始行业");
           if (temp_list[i].fund_label == this.fund_label_selected) {
             this.reviewtabledata.push(temp_list[i]);
             continue;
           }
         }
         if (this.fund_label_selected != "" && this.funder_selected != "") {
-          console.log("开始判断作者和行业");
+          // console.log("开始判断作者和行业");
           if (
             temp_list[i].fund_label == this.fund_label_selected &&
             temp_list[i].funder_id == this.funder_selected

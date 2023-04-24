@@ -172,7 +172,7 @@ export default {
   },
   methods: {
     uploadjson: function (params) {
-      console.log(params);
+      // console.log(params);
       const formData = new FormData();
       formData.append("file", params.file);
       axios.post("/uploadfiles", formData).then((response) => {
@@ -228,8 +228,8 @@ export default {
     },
     filterTag(value, row) {
       // TODO 判断undefined
-      console.log(row.fund_label);
-      console.log(~row.fund_label.indexOf(value));
+      // console.log(row.fund_label);
+      // console.log(~row.fund_label.indexOf(value));
       return row.fund_label === value;
     },
     addtoobserve: function (event) {
