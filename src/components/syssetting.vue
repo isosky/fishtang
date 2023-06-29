@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <el-col :span="3">
+    <el-col :span="2">
       <el-row :span="5">
         <el-input v-model="new_fund_label" style="width: 100px"></el-input>
         <el-button
@@ -87,9 +87,13 @@
         </el-table>
       </el-row>
     </el-col>
-    <el-col :span="6">
+    <el-col :span="5">
       <el-row :span="5">
-        <el-input v-model="author" style="width: 200px"></el-input>
+        <el-input
+          v-model="author"
+          placeholder="author"
+          style="width: 140px"
+        ></el-input>
         <el-select
           v-model="apps_selected"
           clearable
@@ -97,7 +101,7 @@
           allow-create
           default-first-option
           placeholder="请选择apps"
-          style="width: 200px"
+          style="width: 140px"
         >
           <el-option
             v-for="item in apps_option"
@@ -134,23 +138,23 @@
           <el-table-column
             prop="is_firm"
             label="实盘"
-            width="120"
+            width="80"
             :formatter="isformat"
           ></el-table-column>
         </el-table>
       </el-row>
     </el-col>
-    <el-col :span="6">
+    <el-col :span="5">
       <el-row :span="5">
         <el-input
           v-model="zcode"
-          style="width: 200px"
-          placeholder="请输入中证code"
+          style="width: 120px"
+          placeholder="中证code"
         ></el-input>
         <el-input
           v-model="zname"
           style="width: 200px"
-          placeholder="请输入中证名称"
+          placeholder="中证名称"
         ></el-input>
         <el-button
           type="primary"
