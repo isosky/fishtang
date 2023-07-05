@@ -3,184 +3,103 @@
     <el-col :span="2">
       <el-row :span="5">
         <el-input v-model="new_fund_label" style="width: 100px"></el-input>
-        <el-button
-          type="primary"
-          @click="commitlabel"
-          icon="el-icon-check"
-        ></el-button>
+        <el-button type="primary" @click="commitlabel" icon="el-icon-check"></el-button>
       </el-row>
       <el-row :span="5">
         <el-table :data="label_data" height="800">
-          <el-table-column
-            prop="fund_label"
-            label="行业"
-            width="120"
-          ></el-table-column>
+          <el-table-column prop="fund_label" label="行业" width="120"></el-table-column>
         </el-table>
       </el-row>
     </el-col>
     <el-col :span="6">
       <el-row :span="5">
-        <el-select
-          v-model="label_data_selected"
-          clearable
-          filterable
-          allow-create
-          default-first-option
-          placeholder="请选择行业"
-          style="width: 200px"
-        >
-          <el-option
-            v-for="item in fund_label_option"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
+        <el-select v-model="label_data_selected" clearable filterable allow-create default-first-option
+          placeholder="请选择行业" style="width: 200px">
+          <el-option v-for="item in fund_label_option" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
-        <el-select
-          v-model="fund_had_code_selected"
-          clearable
-          filterable
-          default-first-option
-          placeholder="请选择基金"
-        >
-          <el-option
-            v-for="item in fund_had_option"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
+        <el-select v-model="fund_had_code_selected" clearable filterable default-first-option placeholder="请选择基金">
+          <el-option v-for="item in fund_had_option" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
-        <el-button
-          type="primary"
-          @click="commitfundlabel"
-          icon="el-icon-check"
-        ></el-button>
+        <el-button type="primary" @click="commitfundlabel" icon="el-icon-check"></el-button>
       </el-row>
       <el-row :span="5">
-        <el-table
-          :data="
-            getfundlabeldata.filter(
-              (v) =>
-                v.fund_code == fund_had_code_selected || !fund_had_code_selected
-            )
-          "
-          height="800"
-        >
-          <el-table-column
-            prop="fund_label"
-            label="行业"
-            width="120"
-          ></el-table-column>
-          <el-table-column
-            prop="fund_code"
-            label="基金代码"
-            width="120"
-          ></el-table-column>
-          <el-table-column
-            prop="fund_name"
-            label="基金名称"
-            width="240"
-          ></el-table-column>
+        <el-table :data="getfundlabeldata.filter(
+          (v) =>
+            v.fund_code == fund_had_code_selected || !fund_had_code_selected
+        )
+          " height="800">
+          <el-table-column prop="fund_label" label="行业" width="120"></el-table-column>
+          <el-table-column prop="fund_code" label="基金代码" width="120"></el-table-column>
+          <el-table-column prop="fund_name" label="基金名称" width="240"></el-table-column>
         </el-table>
       </el-row>
     </el-col>
     <el-col :span="5">
       <el-row :span="5">
-        <el-input
-          v-model="author"
-          placeholder="author"
-          style="width: 140px"
-        ></el-input>
-        <el-select
-          v-model="apps_selected"
-          clearable
-          filterable
-          allow-create
-          default-first-option
-          placeholder="请选择apps"
-          style="width: 140px"
-        >
-          <el-option
-            v-for="item in apps_option"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
+        <el-input v-model="author" placeholder="author" style="width: 140px"></el-input>
+        <el-select v-model="apps_selected" clearable filterable allow-create default-first-option placeholder="请选择apps"
+          style="width: 140px">
+          <el-option v-for="item in apps_option" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
-        <el-switch
-          v-model="isfirm"
-          active-color="#13ce66"
-          inactive-color="#ff4949"
-        >
+        <el-switch v-model="isfirm" active-color="#13ce66" inactive-color="#ff4949">
         </el-switch>
-        <el-button
-          type="primary"
-          @click="commitauthor"
-          icon="el-icon-check"
-        ></el-button>
+        <el-button type="primary" @click="commitauthor" icon="el-icon-check"></el-button>
       </el-row>
       <el-row :span="5">
         <el-table :data="authortable" height="800">
-          <el-table-column
-            prop="funder_name"
-            label="作者"
-            width="160"
-          ></el-table-column>
-          <el-table-column
-            prop="apps"
-            label="行业"
-            width="120"
-          ></el-table-column>
-          <el-table-column
-            prop="is_firm"
-            label="实盘"
-            width="80"
-            :formatter="isformat"
-          ></el-table-column>
+          <el-table-column prop="funder_name" label="作者" width="160"></el-table-column>
+          <el-table-column prop="apps" label="行业" width="120"></el-table-column>
+          <el-table-column prop="is_firm" label="实盘" width="80" :formatter="isformat"></el-table-column>
         </el-table>
       </el-row>
     </el-col>
     <el-col :span="5">
       <el-row :span="5">
-        <el-input
-          v-model="zcode"
-          style="width: 120px"
-          placeholder="中证code"
-        ></el-input>
-        <el-input
-          v-model="zname"
-          style="width: 200px"
-          placeholder="中证名称"
-        ></el-input>
-        <el-button
-          type="primary"
-          @click="commitzzzslist"
-          icon="el-icon-check"
-        ></el-button>
+        <el-input v-model="zcode" style="width: 120px" placeholder="中证code"></el-input>
+        <el-input v-model="zname" style="width: 200px" placeholder="中证名称"></el-input>
+        <el-button type="primary" @click="commitzzzslist" icon="el-icon-check"></el-button>
       </el-row>
       <el-row :span="5">
         <el-table :data="zztabledata" height="800">
-          <el-table-column
-            prop="zcode"
-            label="行业"
-            width="200"
-          ></el-table-column>
-          <el-table-column
-            prop="zname"
-            label="基金代码"
-            width="200"
-          ></el-table-column>
+          <el-table-column prop="zcode" label="行业" width="200"></el-table-column>
+          <el-table-column prop="zname" label="基金代码" width="200"></el-table-column>
+        </el-table>
+      </el-row>
+    </el-col>
+    <el-col :span="6">
+      <el-row :span="5">
+        <el-select v-model="fund_hist_code_selected" clearable filterable default-first-option placeholder="请选择基金"
+          style="width: 240px">
+          <el-option v-for="item in fund_hist_option" :key="item.value" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select>
+        <el-select v-model="hist_data_selected" clearable filterable allow-create default-first-option placeholder="请选择行业"
+          style="width: 120px">
+          <el-option v-for="item in hist_data_option" :key="item.value" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select>
+        <el-button type="primary" @click="commitfundhist" icon="el-icon-check"></el-button>
+      </el-row>
+      <el-row :span="5">
+        <el-table :data="fundhistdata
+          " height="800">
+          <el-table-column prop="hist_label" label="分类" width="100"></el-table-column>
+          <el-table-column prop="fund_name" label="基金名称" width="300"></el-table-column>
+          <el-table-column label="操作" width="80">
+            <template slot-scope="scope">
+              <el-button @click="deletefundhist(scope.row)" type="text" size="small">删</el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </el-row>
     </el-col>
   </div>
 </template>
   
-  <script>
+<script>
 import axios from "axios";
 export default {
   data() {
@@ -190,6 +109,11 @@ export default {
       label_data_selected: "",
       fund_label_option: [],
       fund_had_code_selected: "",
+      fund_hist_option: [],
+      fund_hist_code_selected: "",
+      hist_data_option: [{ 'label': '债券', 'value': '债券' }, { 'label': '榜一', 'value': '榜一' }, { 'label': '关注', 'value': '关注' }, { 'label': '定投', 'value': '定投' }],
+      hist_data_selected: "",
+      fundhistdata: [],
       fund_had_option: [],
       author: "",
       apps_selected: "",
@@ -214,6 +138,25 @@ export default {
       this.getapps();
       this.getzzzslist();
       this.getauthortable();
+      this.gethist();
+    },
+    gethist: function () {
+      axios.get("/gethist").then((response) => {
+        console.log(response)
+        this.fund_hist_option = response.data.option_data;
+        this.fundhistdata = response.data.table_data;
+      });
+    },
+    deletefundhist: function (event) {
+      axios
+        .post("/deletefundhist", {
+          histid: event.id,
+        })
+        .then((response) => {
+          this.hist_data_selected = "";
+          this.fund_hist_code_selected = "";
+          this.freshall();
+        });
     },
     commitauthor: function () {
       axios
@@ -236,6 +179,18 @@ export default {
         })
         .then((response) => {
           this.new_fund_label = "";
+          this.freshall();
+        });
+    },
+    commitfundhist: function () {
+      axios
+        .post("/commitfundhist", {
+          hist_data_selected: this.hist_data_selected,
+          fund_hist_code_selected: this.fund_hist_code_selected,
+        })
+        .then((response) => {
+          this.hist_data_selected = "";
+          this.fund_hist_code_selected = "";
           this.freshall();
         });
     },
@@ -309,10 +264,11 @@ export default {
 };
 </script>
   
-  <style>
+<style>
 .el-row {
   margin-bottom: 5px;
 }
+
 .el-col {
   border-radius: 4px;
 }

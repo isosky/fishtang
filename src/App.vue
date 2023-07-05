@@ -2,12 +2,7 @@
   <div id="app">
     <el-row v-if="islogin">
       <el-col :span="1">
-        <el-menu
-          :default-active="defaultactive"
-          class="el-menu-vertical-demo"
-          :collapse="isCollapse"
-          @select="moveto"
-        >
+        <el-menu :default-active="defaultactive" class="el-menu-vertical-demo" :collapse="isCollapse" @select="moveto">
           <el-menu-item index="1">
             <i class="el-icon-money"></i>
           </el-menu-item>
@@ -18,9 +13,12 @@
             <i class="el-icon-aim"></i>
           </el-menu-item>
           <el-menu-item index="4">
-            <i class="el-icon-monitor"></i>
+            <i class="el-icon-coin"></i>
           </el-menu-item>
           <el-menu-item index="5">
+            <i class="el-icon-monitor"></i>
+          </el-menu-item>
+          <el-menu-item index="6">
             <i class="el-icon-setting"></i>
           </el-menu-item>
         </el-menu>
@@ -33,11 +31,7 @@
     </el-row>
     <el-row v-if="!islogin">
       <el-input v-model="todo_user_name" placeholder="请输入内容"></el-input>
-      <el-input
-        placeholder="请输入密码"
-        v-model="todo_user_pass"
-        show-password
-      ></el-input>
+      <el-input placeholder="请输入密码" v-model="todo_user_pass" show-password></el-input>
       <el-button type="primary" @click="login">确 定</el-button>
     </el-row>
   </div>
@@ -54,7 +48,7 @@ export default {
       islogin: false,
       defaultactive: "1",
       isCollapse: true,
-      routers: ["/FishTang", "/FI", "/FS", "/FA", "/syssetting"],
+      routers: ["/FishTang", "/FI", "/FS", "/FS_hist", "/FA", "/syssetting"],
       todo_user_name: "",
       todo_user_pass: "",
     };

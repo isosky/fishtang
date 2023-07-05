@@ -7,6 +7,7 @@ import FishTang from './components/FishTang.vue'
 import FA from './components/FundAnalysis.vue'
 import FI from './components/FundIndustry.vue'
 import FS from './components/FundSummary.vue'
+import FS_hist from './components/FundSummary_hist.vue'
 import syssetting from './components/syssetting.vue'
 import axios from 'axios'
 
@@ -21,6 +22,10 @@ const routes = [{
   {
     path: '/FS',
     component: FS
+  },
+  {
+    path: '/FS_hist',
+    component: FS_hist
   },
   {
     path: '/FI',
@@ -45,8 +50,8 @@ VueRouter.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err)
 }
 
-axios.defaults.baseURL = 'http://localhost:5000';
-// axios.defaults.baseURL = 'http://101.42.152.129:5000';
+// axios.defaults.baseURL = 'http://localhost:5000';
+axios.defaults.baseURL = 'http://101.42.152.129:5000';
 
 new Vue({
   router,
