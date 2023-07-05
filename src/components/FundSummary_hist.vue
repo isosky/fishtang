@@ -29,8 +29,8 @@ export default {
 
             return [
               '<div class="tooltip-title">' +
-              formatUtil.encodeHTML(treePath.join("/")) +
-              "</div>",
+                formatUtil.encodeHTML(treePath.join("/")) +
+                "</div>",
               "金额: " + formatUtil.addCommas(value),
             ].join("");
           },
@@ -90,7 +90,9 @@ export default {
                       params.name,
                       echarts.format.addCommas(params.value),
                       echarts.format.addCommas(
-                        (params.value / params.data.buy_limit * 100).toFixed(2) + "%"
+                        ((params.value / params.data.buy_limit) * 100).toFixed(
+                          2
+                        ) + "%"
                       ),
                     ];
                     return arr.join("\n");
@@ -114,10 +116,13 @@ export default {
                       params.name,
                       "{budget|" + echarts.format.addCommas(params.value) + "}",
                       "{budgetpercent|" +
-                      echarts.format.addCommas(
-                        (params.value / params.data.buy_limit * 100).toFixed(2) + "%"
-                      ) +
-                      "}",
+                        echarts.format.addCommas(
+                          (
+                            (params.value / params.data.buy_limit) *
+                            100
+                          ).toFixed(2) + "%"
+                        ) +
+                        "}",
                     ];
                     return arr.join("\n");
                   },

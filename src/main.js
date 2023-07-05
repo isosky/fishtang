@@ -50,8 +50,8 @@ VueRouter.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err)
 }
 
-// axios.defaults.baseURL = 'http://localhost:5000';
-axios.defaults.baseURL = 'http://101.42.152.129:5000';
+axios.defaults.baseURL = 'http://localhost:5000';
+// axios.defaults.baseURL = 'http://101.42.152.129:5000';
 
 new Vue({
   router,

@@ -90,7 +90,9 @@ export default {
                       params.name,
                       echarts.format.addCommas(params.value),
                       echarts.format.addCommas(
-                        (params.value / 1000).toFixed(2) + "%"
+                        ((params.value / params.data.buy_limit) * 100).toFixed(
+                          2
+                        ) + "%"
                       ),
                     ];
                     return arr.join("\n");
@@ -115,7 +117,10 @@ export default {
                       "{budget|" + echarts.format.addCommas(params.value) + "}",
                       "{budgetpercent|" +
                         echarts.format.addCommas(
-                          (params.value / 1000).toFixed(2) + "%"
+                          (
+                            (params.value / params.data.buy_limit) *
+                            100
+                          ).toFixed(2) + "%"
                         ) +
                         "}",
                     ];
